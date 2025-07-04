@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Log in to private registry
+      run: |
+        echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login registry.spinuphost.be -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+    - name: Build the Docker image
+      run: docker build -t registry.spinuphost.be/odoo-18:$(date +%Y%m%d) .
+    - name: Push the image
+      run: docker push registry.spinuphost.be/odoo-18:$(date +%Y%m%d)
