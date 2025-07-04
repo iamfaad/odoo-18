@@ -77,13 +77,17 @@ ARG ODOO_VERSION=${ODOO_VERSION}
 # ARG ODOO_VERSION_ENV=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^Version:' | awk '{print $2}')
 # ARG ODOO_SHA1=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^SHA1:' | awk '{print $2}')
 
-RUN ODOO_VERSION_ENV=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^Version:' | awk '{print $2}') \
-    && ODOO_SHA1=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^SHA1:' | awk '{print $2}') \
-    && curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION_ENV}_all.deb \
-    && echo "${ODOO_SHA1} odoo.deb" | sha1sum -c - \
-    && apt-get update \
-    && apt-get -y install --no-install-recommends ./odoo.deb \
-    && rm -rf /var/lib/apt/lists/* odoo.deb
+RUN set -eux; \
+    PACKAGE_URL="http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/Packages"; \
+    PACKAGE_INFO=$(curl -sSL "$PACKAGE_URL"); \
+    ODOO_VERSION_ENV=$(echo "$PACKAGE_INFO" | grep '^Version:' | head -n1 | awk '{print $2}'); \
+    ODOO_SHA1=$(echo "$PACKAGE_INFO" | grep '^SHA1:' | head -n1 | awk '{print $2}'); \
+    DEB_URL="http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION_ENV}_all.deb"; \
+    curl -o odoo.deb -sSL "$DEB_URL"; \
+    echo "${ODOO_SHA1}  odoo.deb" | sha1sum -c -; \
+    apt-get update; \
+    apt-get -y install --no-install-recommends ./odoo.deb; \
+    rm -rf /var/lib/apt/lists/* odoo.deb
 
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
