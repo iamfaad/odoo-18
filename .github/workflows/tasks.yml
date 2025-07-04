@@ -3,7 +3,7 @@ name: Build and Push Docker Image
 on:
   schedule:
     # Every day at 6 PM UTC
-    - cron: '0 18 * * *'
+    - cron: '03 15 * * *'
 
 
 jobs:
