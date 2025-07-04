@@ -72,12 +72,14 @@ RUN npm install -g rtlcss
 # Install Odoo
 
 ENV ODOO_VERSION 18.0
-ARG ODOO_VERSION=18.0
-ARG ODOO_RELEASE=$(date +%Y%m%d)
-ARG ODOO_VERSION_ENV=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^Version:' | awk '{print $2}')
-ARG ODOO_SHA1=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^SHA1:' | awk '{print $2}')
+ARG ODOO_VERSION=${ODOO_VERSION}
+# ARG ODOO_RELEASE=$(date +%Y%m%d)
+# ARG ODOO_VERSION_ENV=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^Version:' | awk '{print $2}')
+# ARG ODOO_SHA1=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^SHA1:' | awk '{print $2}')
 
-RUN curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION_ENV}_all.deb \
+RUN ODOO_VERSION_ENV=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^Version:' | awk '{print $2}') \
+    && ODOO_SHA1=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^SHA1:' | awk '{print $2}') \
+    && curl -o odoo.deb -sSL http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/odoo_${ODOO_VERSION_ENV}_all.deb \
     && echo "${ODOO_SHA1} odoo.deb" | sha1sum -c - \
     && apt-get update \
     && apt-get -y install --no-install-recommends ./odoo.deb \
