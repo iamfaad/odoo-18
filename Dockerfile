@@ -71,12 +71,13 @@ RUN npm install -g rtlcss
 
 # Install Odoo
 
-ENV ODOO_VERSION 18.0
+ENV ODOO_VERSION 17.0
 ARG ODOO_VERSION=${ODOO_VERSION}
 # ARG ODOO_RELEASE=$(date +%Y%m%d)
-# ARG ODOO_VERSION_ENV=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^Version:' | awk '{print $2}')
-# ARG ODOO_SHA1=$(curl -sSL http://nightly.odoo.com/18.0/nightly/deb/Packages | grep '^SHA1:' | awk '{print $2}')
+# ARG ODOO_VERSION_ENV=$(curl -sSL http://nightly.odoo.com/17.0/nightly/deb/Packages | grep '^Version:' | awk '{print $2}')
+# ARG ODOO_SHA1=$(curl -sSL http://nightly.odoo.com/17.0/nightly/deb/Packages | grep '^SHA1:' | awk '{print $2}')
 
+### Identify and select odoo version and release
 RUN set -eux; \
     PACKAGE_URL="http://nightly.odoo.com/${ODOO_VERSION}/nightly/deb/Packages"; \
     PACKAGE_INFO=$(curl -sSL "$PACKAGE_URL"); \
