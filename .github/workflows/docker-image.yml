@@ -37,3 +37,17 @@ jobs:
       run: docker build -t registry.spinuphost.be/odoo-17:$(date +%Y%m%d) .
     - name: Push the image
       run: docker push registry.spinuphost.be/odoo-18:$(date +%Y%m%d)
+
+    - name: Cleanup workspace and Docker artifacts
+      if: always()
+      run: |
+        echo "Cleaning up files..."
+        rm -rf ./git-repos
+
+        echo "Cleaning up dangling Docker images..."
+        docker image prune -f
+
+        echo "Cleaning up containers (if any stuck)..."
+        docker container prune -f
+
+        echo "Done."
