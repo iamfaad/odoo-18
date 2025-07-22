@@ -36,7 +36,7 @@ jobs:
     - name: Build the Docker image
       run: docker build -t registry.spinuphost.be/odoo-17:$(date +%Y%m%d) .
     - name: Push the image
-      run: docker push registry.spinuphost.be/odoo-18:$(date +%Y%m%d)
+      run: docker push registry.spinuphost.be/odoo-17:$(date +%Y%m%d)
 
     - name: Cleanup workspace and Docker artifacts
       if: always()
