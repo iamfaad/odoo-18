@@ -28,7 +28,7 @@ jobs:
 
     - name: Clone private repo
       run: |
-        git clone -b 17.0 git@github.com:odoo/enterprise.git ./git-repo
+        git clone -b 17.0 git@github.com:odoo/enterprise.git ./enterprise
 
 
     - name: Log in to private registry
